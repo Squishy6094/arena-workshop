@@ -271,8 +271,9 @@ function mario_cannon_box_update(m)
             function (obj)
                 obj.oArenaCannonBallGlobalOwner = np.globalIndex
                 obj.oArenaCannonBallSize = cannonBallSize
-                obj.oMoveAngleYaw = m.faceAngle.y + math.s16(math.random(-300, 300))
+                obj.oMoveAngleYaw = m.faceAngle.y
                 obj.oForwardVel = m.forwardVel + 150
+                obj.oArenaCannonBallSpin = math.random(-2, 2)
             end)
         s.ammo = s.ammo - 1
         s.charging = 0

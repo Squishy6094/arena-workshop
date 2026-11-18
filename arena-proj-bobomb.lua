@@ -91,6 +91,9 @@ function bhv_arena_bobomb_thrown_loop(obj)
     local pos    = { x = obj.oPosX, y = obj.oPosY, z = obj.oPosZ }
     local radius = 30
 
+    if obj.oForwardVel < 18 then
+        obj.oForwardVel = 18
+    end
     for i = 0, MAX_PLAYERS - 1 do
         local m = gMarioStates[i]
         if active_player(m) and global_index_hurts_mario_state(obj.oArenaBobombGlobalOwner, m) and not is_invuln_or_intang(m) then

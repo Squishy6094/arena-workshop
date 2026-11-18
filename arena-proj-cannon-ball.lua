@@ -2,10 +2,12 @@ define_custom_obj_fields({
     oArenaCannonBallGlobalOwner = 'u32',
     oArenaCannonBallSize = 'f32',
     oArenaCannonBallDamages = 'u32',
+    oArenaCannonBallSpin = 'f32',
 })
 
+---@param obj Object
 function bhv_arena_cannon_ball_init(obj)
-    obj.oFlags = OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE
+    obj.oFlags = OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW
     obj.oArenaCannonBallDamages = 1
     obj_scale(obj, 1.5 * obj.oArenaCannonBallSize)
     obj_set_billboard(obj)
@@ -57,8 +59,11 @@ function bhv_arena_cannon_ball_loop(obj)
         e.lastDamagedByGlobal = obj.oArenaCannonBallGlobalOwner
     end
 
+     
+
     -- I'd like there to be a smoke trail... but sm64 doesn't use a zbuffer for transparent objects :(
     --spawn_mist_advanced(obj, 1 + obj.oArenaCannonBallSize * 5, 2, 1, 0)
+    spawn_mist(obj, 1)
 
     info = collision_find_surface_on_ray(
             a.x, a.y, a.z,
@@ -72,6 +77,11 @@ function bhv_arena_cannon_ball_loop(obj)
         obj.oPosX = obj.oPosX + dir.x
         obj.oPosY = obj.oPosY + dir.y
         obj.oPosZ = obj.oPosZ + dir.z
+        obj.oMoveAngleYaw = obj.oMoveAngleYaw + obj.oArenaCannonBallSpin * (obj.oTimer)
+        obj.oVelX = sins(obj.oMoveAngleYaw) * obj.oForwardVel
+        obj.oVelY = 0
+        obj.oVelZ = coss(obj.oMoveAngleYaw) * obj.oForwardVel
+        obj.oTimer = clampf(obj.oTimer, 0, 30 * 6)
     end
 
 end
