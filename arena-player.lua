@@ -247,12 +247,13 @@ function mario_cannon_box_update(m)
     local e = gMarioStateExtras[m.playerIndex]
     local s = gPlayerSyncTable[m.playerIndex]
 
+
     if m.playerIndex == 0 and (m.controller.buttonPressed & Y_BUTTON) ~= 0 then
         s.charging = get_network_area_timer()
     end
 
     if (m.controller.buttonDown & Y_BUTTON) ~= 0 and s.charging > 0 then
-        local cannonBallSize = clamp((get_network_area_timer() - s.charging) / (30 * 5) + 0.1, 0, 1)
+        local cannonBallSize = clamp((get_network_area_timer() - s.charging) / (30 * 6) + 0.1, 0, 1)
         local held = gItemHeld[m.playerIndex]
         if held ~= nil then
             for i = 0, 2 do
@@ -265,16 +266,16 @@ function mario_cannon_box_update(m)
             end
         end
     elseif m.playerIndex == 0 and s.charging > 0 then
-        local cannonBallSize = clamp((get_network_area_timer() - s.charging) / (30 * 5) + 0.1, 0, 1)
-        s.charging = 0
+        local cannonBallSize = clamp((get_network_area_timer() - s.charging) / (30 * 6) + 0.1, 0, 1)
         spawn_sync_object(id_bhvArenaCannonBall, E_MODEL_CANNON_BALL, m.pos.x, m.pos.y + 150, m.pos.z,
             function (obj)
                 obj.oArenaCannonBallGlobalOwner = np.globalIndex
                 obj.oArenaCannonBallSize = cannonBallSize
-                obj.oMoveAngleYaw = m.faceAngle.y
+                obj.oMoveAngleYaw = m.faceAngle.y + math.s16(math.random(-300, 300))
                 obj.oForwardVel = m.forwardVel + 150
             end)
         s.ammo = s.ammo - 1
+        s.charging = 0
     end
 end
 

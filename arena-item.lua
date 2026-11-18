@@ -25,7 +25,7 @@ function bhv_arena_item_init(obj)
     })
 end
 
-function bhv_arena_item_collect(obj)
+function bhv_arena_item_collect(obj, ammoCount)
     spawn_sparkles(obj.oPosX, obj.oPosY, obj.oPosZ)
     spawn_mist(obj, 2)
     obj.oArenaItemTouched = 1
@@ -35,7 +35,11 @@ function bhv_arena_item_collect(obj)
 
     local s = gPlayerSyncTable[0]
     s.charging = 0
-    s.ammo = 5
+    if ammoCount then
+        s.ammo = ammoCount
+    else
+        s.ammo = 5
+    end
     s.item = obj.oArenaItemType
 end
 
@@ -145,7 +149,7 @@ function bhv_arena_item_check_collect(obj)
             if data ~= nil and data.customCollectionFunc ~= nil then
                 data.customCollectionFunc(obj)
             elseif s.item == ITEM_NONE and s.item == ITEM_NONE and s.item == ITEM_NONE then
-                bhv_arena_item_collect(obj)
+                bhv_arena_item_collect(obj, data.ammoCount)
             end
         end
     end
@@ -181,6 +185,7 @@ gItemData = {
         updateAnimState = false,
         timeout = arenaItemTimeout,
         customCollectionFunc = nil,
+        ammoCount = 5,
     },
     [ITEM_METAL_CAP] = {
         model = E_MODEL_MARIOS_METAL_CAP,
@@ -217,6 +222,7 @@ gItemData = {
         updateAnimState = false,
         timeout = arenaItemTimeout,
         customCollectionFunc = nil,
+        ammoCount = 3
     },
     [ITEM_BOBOMB] = {
         model = E_MODEL_BLACK_BOBOMB,
