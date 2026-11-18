@@ -386,7 +386,7 @@ function mario_local_update(m)
     end
 
     -- discard current item
-    if s.item ~= ITEM_NONE and (s.ammo <= 0 or (m.controller.buttonPressed & L_TRIG) ~= 0) then
+    if s.item ~= ITEM_NONE and (s.ammo <= 0 or (m.controller.buttonPressed & X_BUTTON) ~= 0) then
         s.item = ITEM_NONE
         if gItemHeld[m.playerIndex] ~= nil then
             spawn_triangles(gItemHeld[m.playerIndex])
@@ -436,7 +436,6 @@ function mario_update(m)
     end
 
     -- clear invincibilities
-    m.invincTimer = math.min(m.invincTimer, 5)
     if m.knockbackTimer > 5 then
         m.knockbackTimer = 5
     end
